@@ -24,6 +24,9 @@ const createImagesCard = galleryItem => {
  
 
 const imagesCards = galleryItems.map(galleryItem => createImagesCard(galleryItem));
-console.log(imagesCard);
+console.log(imagesCards);
 
-const openModalimg = document.querySelector('.js-gallery')
+const openModalImg = document.querySelector('.js-gallery');
+openModalImg.addEventListener('click', () => {
+  document.URL.classList.add('.lightbox')
+});

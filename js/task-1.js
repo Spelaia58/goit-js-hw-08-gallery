@@ -30,8 +30,7 @@ console.log(imagesCards);
 const refs = {
   galleryList: document.querySelector("ul.js-gallery"),
   lightbox: document.querySelector(".js-lightbox"),
-  btn: document.querySelector('[data-action = "close-modal"]'),
-  
+  btn: document.querySelector('[data-action = "close-modal"]')
 };
 
 refs.galleryList.addEventListener("click", handleGalleryClick);
@@ -54,16 +53,20 @@ function setActiveLink(nextActiveLink) {
 const openModalImg = document.querySelector(".js-gallery");
 openModalImg.addEventListener("click", () => {
   event.preventDefault();
-  
-  refs.lightbox.classList.add('is-open');
-  
-  
-  refs.lightbox.querySelector('.lightbox__image').src = event.target.dataset.source;
-  
+  refs.lightbox.classList.add("is-open");
+
+  refs.lightbox.querySelector(".lightbox__image").src =
+    event.target.dataset.source;
 });
 const closeModalImg = document.querySelector(
   'button[data-action="close-lightbox"]'
 );
 closeModalImg.addEventListener("click", () => {
-  refs.lightbox.classList.remove("is-open")
-})
+  refs.lightbox.classList.remove("is-open");
+});
+const closeOverlay = document.querySelector('div.lightbox__overlay');
+closeOverlay.addEventListener('click', event => {
+     if(event.target === event.currentTarget) {
+      refs.lightbox.classList.remove("is-open");
+     };
+});

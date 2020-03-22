@@ -6,7 +6,7 @@ const createImagesCard = galleryItem => {
 
   const linkItem = document.createElement("a");
   linkItem.classList.add("gallery__link");
-  linkItem.setAttribute("href", "");
+  linkItem.setAttribute("href", galleryItem.original);
 
   const imgItem = document.createElement("img");
   imgItem.classList.add("gallery__image");
@@ -22,16 +22,16 @@ const createImagesCard = galleryItem => {
   return listItem;
 };
 
-const imagesCards = galleryItems.map(galleryItem =>
-  createImagesCard(galleryItem)
-);
-console.log(imagesCards);
-
 const refs = {
   galleryList: document.querySelector("ul.js-gallery"),
   lightbox: document.querySelector(".js-lightbox"),
   btn: document.querySelector('[data-action = "close-modal"]')
 };
+
+const imagesCards = galleryItems.map(galleryItem =>
+  createImagesCard(galleryItem)
+);
+refs.galleryList.append(...imagesCards);
 
 refs.galleryList.addEventListener("click", handleGalleryClick);
 function handleGalleryClick(event) {
@@ -47,26 +47,36 @@ function setActiveLink(nextActiveLink) {
     currentActiveLink.classList.remove("active");
   }
   nextActiveLink.classList.add("active");
-  console.log(setActiveLink);
 }
 
 const openModalImg = document.querySelector(".js-gallery");
-openModalImg.addEventListener("click", () => {
+const closeModalImg = document.querySelector(
+  'button[data-action="close-lightbox"]'
+);
+const closeOverlay = document.querySelector(".lightbox__content");
+
+openModalImg.addEventListener("click", onOpenModal);
+closeModalImg.addEventListener("click", onCloseModal);
+closeOverlay.addEventListener("click", onOverlayClick);
+
+function onOpenModal() {
   event.preventDefault();
+  window.addEventListener("keydown", event => {
+    if (event.code === "Escape") {
+      onCloseModal();
+    }
+  });
+
   refs.lightbox.classList.add("is-open");
 
   refs.lightbox.querySelector(".lightbox__image").src =
     event.target.dataset.source;
-});
-const closeModalImg = document.querySelector(
-  'button[data-action="close-lightbox"]'
-);
-closeModalImg.addEventListener("click", () => {
+}
+function onCloseModal() {
   refs.lightbox.classList.remove("is-open");
-});
-const closeOverlay = document.querySelector('div.lightbox__overlay');
-closeOverlay.addEventListener('click', event => {
-     if(event.target === event.currentTarget) {
-      refs.lightbox.classList.remove("is-open");
-     };
-});
+}
+function onOverlayClick() {
+  if (event.target === event.currentTarget) {
+    onCloseModal();
+  }
+}
